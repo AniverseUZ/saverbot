@@ -8,15 +8,16 @@ from os import sys, execl, environ
 CHANNEL_USERNAMES = ['AniverseAnime', 'AniverseTeam']
 
 # Check if the user is subscribed to any of the channels
-def is_subscribed(user_id):
+async def is_subscribed(user_id):
+    result = {}
     for channel_username in CHANNEL_USERNAMES:
         try:
-            chat_member = Mbot.get_chat_member(channel_username, user_id)
-            if chat_member.status not in ['left', 'kicked']:
-                return True
+            chat_member = await Mbot.get_chat_member(channel_username, user_id)
+            result[channel_username] = chat_member.status
         except Exception as e:
-            print(f"Error checking subscription: {e}")
-    return False
+            result[channel_username] = f"Error: {e}"
+    
+    return result
 
 RESTART_ON = environ.get('RESTART_ON')
 
@@ -34,36 +35,38 @@ async def monitor(Mbot, message):
     # Example: await message.forward(DUMP_GROUP)
     pass
 
+# Updated /start command handler
 @Mbot.on_message(filters.command("start") & filters.incoming)
 async def start(Mbot, message):
     user_id = message.from_user.id
-    if not is_subscribed(user_id):
-        # If not subscribed, provide buttons to subscribe to any of the channels
-        keyboard_buttons = [
-            [InlineKeyboardButton(f"Subscribe to {channel}", url=f'https://t.me/{channel}')] for channel in CHANNEL_USERNAMES
-        ]
-        # Add the "Check Subscription" button
-        keyboard_buttons.append([InlineKeyboardButton("Check Subscription", callback_data="check_subscription")])
-        
-        keyboard = InlineKeyboardMarkup(keyboard_buttons)
-        await message.reply("To use this bot, you need to subscribe to one of our channels. Click one of the buttons below to subscribe.", reply_markup=keyboard)
-        return
+    subscription_status = await is_subscribed(user_id)
 
-    # If subscribed, provide a button to check subscription
-    check_button = InlineKeyboardButton("Check Subscription", callback_data="check_subscription")
-    keyboard = InlineKeyboardMarkup([[check_button]])
-    
-    await message.reply(f"👋👋 Assalomu Alaykum 👋👋 {message.from_user.mention()}\n Siz ushbu bot orqali o'zingiz istagan ijtimoiy tarmoqdan video, post, rasm, hikoya va boshqalarni yuklab olishingiz mumkin! \nHozirda ushbu bot orqali siz \n☑️Instagram \n☑️TikTok \n☑️Twitter \n☑️Facebook orqali barcha medialarni yuklab olishingiz mumkin! \nShunchaki botga havolangizni yuboring!", reply_markup=keyboard)
+    if any(status == 'member' for status in subscription_status.values()):
+        # User is subscribed, send the start message or perform other actions
+        await Mbot.send_message(user_id, f"👋👋 Assalomu Alaykum 👋👋 {message.from_user.mention()}\n Siz ushbu bot orqali o'zingiz istagan ijtimoiy tarmoqdan video, post, rasm, hikoya va boshqalarni yuklab olishingiz mumkin! \nHozirda ushbu bot orqali siz \n☑️Instagram \n☑️TikTok \n☑️Twitter \n☑️Facebook orqali barcha medialarni yuklab olishingiz mumkin! \nShunchaki botga havolangizni yuboring!",
+                                 reply_markup=generate_keyboard())
+    else:
+        # User is not subscribed, send the force subscribe message or take other actions
+        await Mbot.send_message(user_id, "You are not subscribed. Please subscribe first.")
+
+# Function to generate the inline keyboard
+def generate_keyboard():
+    keyboard_buttons = [
+        [InlineKeyboardButton(f"Subscribe to {channel}", url=f'https://t.me/{channel}')] for channel in CHANNEL_USERNAMES
+    ]
+    # Add the "Check Subscription" button
+    keyboard_buttons.append([InlineKeyboardButton("Check Subscription", callback_data="check_subscription")])
+    return InlineKeyboardMarkup(keyboard_buttons)
+
+# Rest of the code...
 
 # Callback Query handler for the buttons
 @Mbot.on_callback_query()
 async def callback_query_handler(Mbot, callback_query):
     user_id = callback_query.from_user.id
     if callback_query.data == "check_subscription":
-        if is_subscribed(user_id):
-            await callback_query.answer("You are subscribed!")
-        else:
-            await callback_query.answer("You are not subscribed. Please subscribe first.")
+        # Send a /start command to check the subscription
+        await Mbot.send_message(user_id, "/start")
     elif callback_query.data.startswith("subscribe_"):
         # Extract the channel username from the callback data
         channel = callback_query.data.split("_")[1]
