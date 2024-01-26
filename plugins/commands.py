@@ -5,7 +5,7 @@ from sys import executable
 from os import sys, execl, environ
 
 # Replace with your actual channel usernames
-CHANNEL_USERNAMES = ['@Channel1Username', '@Channel2Username', '@Channel3Username']
+CHANNEL_USERNAMES = ['@AniverseTeam', '@AniverseAnime']
 
 # Check if the user is subscribed to any of the channels
 def is_subscribed(user_id):
