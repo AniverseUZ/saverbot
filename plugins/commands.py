@@ -4,14 +4,14 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from sys import executable
 from os import sys, execl, environ
 
-# Replace with your actual channel IDs
-CHANNEL_IDS = [-1002081389283, -1002009206763]
+# Replace with your actual channel usernames
+CHANNEL_USERNAMES = ['@AniverseTeam', '@AniverseAnime']
 
 # Check if the user is subscribed to any of the channels
 def is_subscribed(user_id):
-    for channel_id in CHANNEL_IDS:
+    for channel_username in CHANNEL_USERNAMES:
         try:
-            chat_member = Mbot.get_chat_member(channel_id, user_id)
+            chat_member = Mbot.get_chat_member(channel_username, user_id)
             if chat_member.status not in ['left', 'kicked']:
                 return True
         except Exception as e:
@@ -40,8 +40,11 @@ async def start(Mbot, message):
     if not is_subscribed(user_id):
         # If not subscribed, provide buttons to subscribe to any of the channels
         keyboard_buttons = [
-            [InlineKeyboardButton(f"Subscribe to Channel {i+1}", url=f'https://t.me/{channel_id}')] for i, channel_id in enumerate(CHANNEL_IDS)
+            [InlineKeyboardButton(f"Subscribe to {channel}", url=f'https://t.me/{channel}')] for channel in CHANNEL_USERNAMES
         ]
+        # Add the "Check Subscription" button
+        keyboard_buttons.append([InlineKeyboardButton("Check Subscription", callback_data="check_subscription")])
+        
         keyboard = InlineKeyboardMarkup(keyboard_buttons)
         await message.reply("To use this bot, you need to subscribe to one of our channels. Click one of the buttons below to subscribe.", reply_markup=keyboard)
         return
