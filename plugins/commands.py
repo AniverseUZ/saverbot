@@ -5,7 +5,7 @@ from sys import executable
 from os import sys, execl, environ
 
 # Replace with your actual channel usernames
-CHANNEL_USERNAMES = ['https://t.me/Aniverseanime', 'https://t.me/AniverseTeam']
+CHANNEL_USERNAMES = ['Aniverseanime', 'AniverseTeam']
 
 # Check if the user is subscribed to any of the channels
 def is_subscribed(user_id):
