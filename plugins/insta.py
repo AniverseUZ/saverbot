@@ -23,9 +23,9 @@ async def link_handler(Mbot, message):
         url= link.replace("instagram.com","ddinstagram.com")
         url=url.replace("==","%3D%3D")
         if url.endswith("="):
-           dump_file=await message.reply_video(url[:-1],caption="❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!")
+           dump_file=await message.reply_video(url[:-1],caption="❇️ @InstaProSaverrobot - orqali yuklab olindi!")
         else:
-            dump_file=await message.reply_video(url,caption="❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!")
+            dump_file=await message.reply_video(url,caption="❇️ @InstaProSaverrobot - orqali yuklab olindi!")
         if 'dump_file' in locals():
            await dump_file.forward(DUMP_GROUP)
         await m.delete()
@@ -54,15 +54,15 @@ async def link_handler(Mbot, message):
                       return await message.reply("oops nimadur xato ketdi!")
                try:
                    if ddinsta:
-                      dump_file=await message.reply_video(content_value,caption="❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!")
+                      dump_file=await message.reply_video(content_value,caption="❇️ @InstaProSaverrobot - orqali yuklab olindi!")
                    else:
-                       dump_file=await message.reply_video(content_value, caption="❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!")
+                       dump_file=await message.reply_video(content_value, caption="❇️ @InstaProSaverrobot - orqali yuklab olindi!")
                except:
                    downfile=f"{os.getcwd()}/{random.randint(1,10000000)}"
                    with open(downfile,'wb') as x:
                        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
                        x.write(requests.get(content_value,headers=headers).content)
-                   dump_file=await message.reply_video(downfile,caption="❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!") 
+                   dump_file=await message.reply_video(downfile,caption="❇️ @InstaProSaverrobot - orqali yuklab olindi!") 
             elif "/p/" in url:
                   meta_tag = requests.post("https://saveig.app/api/ajaxSearch", data={"q": link, "t": "media", "lang": "en"}, headers=headers)
                   if meta_tag.ok:
@@ -75,7 +75,7 @@ async def link_handler(Mbot, message):
                      com=await message.reply_text(meta[i])
                      await asyncio.sleep(1)
                      try:
-                        dump_file=await message.reply_video(com.text,caption="❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!")
+                        dump_file=await message.reply_video(com.text,caption="❇️ @InstaProSaverrobot - orqali yuklab olindi!")
                         await com.delete()
                      except:
                          pass 
@@ -87,12 +87,12 @@ async def link_handler(Mbot, message):
                   else:
                       return await message.reply("Oops Nimadur xato ketdi!")
                   try:
-                     dump_file=await message.reply_video(meta[0], caption="❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!")
+                     dump_file=await message.reply_video(meta[0], caption="❇️ @InstaProSaverrobot - orqali yuklab olindi!")
                   except:
                       com=await message.reply(meta[0])
                       await asyncio.sleep(1)
                       try:
-                          dump_file=await message.reply_video(com.text,caption="❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!")
+                          dump_file=await message.reply_video(com.text,caption="❇️ @InstaProSaverrobot - orqali yuklab olindi!")
                           await com.delete()
                       except:
                           pass
@@ -115,4 +115,4 @@ async def link_handler(Mbot, message):
             await m.delete()
             if 'downfile' in locals():
                 os.remove(downfile)
-            await message.reply("❇️ @InstaTiktokSaverUzBot \n❇️ @InstaTiktokSaverUzBot")
+            await message.reply("❇️ @InstaProSaverrobot \n❇️ @InstaProSaverrobot")

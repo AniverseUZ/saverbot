@@ -18,14 +18,14 @@ async def link_handler(Mbot, message):
                      await message.reply_photo(get_api['cover'])
                  except:
                      pass 
-              dump_file = await message.reply_video(get_api['links'][0]['a'], caption="❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!")
+              dump_file = await message.reply_video(get_api['links'][0]['a'], caption="❇️ @InstaProSaverrobot - orqali yuklab olindi!")
            except KeyError:
                return await message.reply("⛔️Noto'g'ri TikTok havolasi! Iltimos tekshirib qayta kiriting! :)")
            except Exception:
                snd_msg=await message.reply(get_api['links'][0]['a'])
                await asyncio.sleep(1)
                try:
-                  dump_file = await message.reply_video(get_api['links'][0]['a'],caption="❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!")
+                  dump_file = await message.reply_video(get_api['links'][0]['a'],caption="❇️ @InstaProSaverrobot - orqali yuklab olindi!")
                   await snd_msg.delete()
                except Exception:
                    pass
@@ -38,4 +38,4 @@ async def link_handler(Mbot, message):
             if DUMP_GROUP:
                await dump_file.copy(DUMP_GROUP)
             await m.delete()
-        await message.reply("❇️ @InstaTiktokSaverUzBot \n❇️ @InstaTiktokSaverUzBot")
+        await message.reply("❇️ @InstaProSaverrobot \n❇️ @InstaProSaverrobot")

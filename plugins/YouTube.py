@@ -164,7 +164,7 @@ async def _(Mbot,message):
                print(traceback.format_exc())
                await Mbot.send_message(LOG_GROUP, traceback.format_exc())
                
-        return await message.reply("❇️ @InstaTiktokSaverUzBot \n❇️ @InstaTiktokSaverUzBot")
+        return await message.reply("❇️ @InstaProSaverrobot \n❇️ @InstaProSaverrobot")
     try:
         if "music.youtube.com" in link:
             link=link.replace("music.youtube.com","youtube.com")
@@ -183,14 +183,14 @@ async def _(Mbot,message):
             thumnail = await thumb_down(id[0])
           #  await message.reply(fileLink)
         #    await message.reply_audio(fileLink)
-            AForCopy = await message.reply_audio(fileLink,caption=f"[{id[3]}](https://youtu.be/{id[0]}) - {id[2]} ❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!",title=id[3].replace("_"," "),performer=id[2],thumb=thumnail,duration=id[4])
+            AForCopy = await message.reply_audio(fileLink,caption=f"[{id[3]}](https://youtu.be/{id[0]}) - {id[2]} ❇️ @InstaProSaverrobot - orqali yuklab olindi!",title=id[3].replace("_"," "),performer=id[2],thumb=thumnail,duration=id[4])
             if DUMP_GROUP:
                 await PForCopy.copy(DUMP_GROUP)
                 await AForCopy.copy(DUMP_GROUP)
         await m.delete()
         if os.path.exists(randomdir):
            rmtree(randomdir)
-        await message.reply("❇️ @InstaTiktokSaverUzBot \n❇️ @InstaTiktokSaverUzBot")
+        await message.reply("❇️ @InstaProSaverrobot \n❇️ @InstaProSaverrobot")
     except Exception as e:
         print(e)
         if LOG_GROUP:

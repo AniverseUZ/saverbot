@@ -10,23 +10,23 @@ async def link_handler(Mbot, message):
        m = await message.reply_text("⏳")
        get_api=requests.get(f"https://yasirapi.eu.org/fbdl?link={link}").json()
        if get_api['success'] == "false":
-          return await message.reply("⛔️Noto'g'ri TikTok havolasi! Iltimos tekshirib qayta kiriting! :)")
+          return await message.reply("⛔️Noto'g'ri TikTok havolasi! Iltimos tekshirib qayta kiriting! :)") 
        if get_api['success'] == "ok":
           if get_api.get('result').get('hd'):
              try:
-                 dump_file = await message.reply_video(get_api['result']['hd'],caption="❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!")
+                 dump_file = await message.reply_video(get_api['result']['hd'],caption="❇️ @InstaProSaverrobot - orqali yuklab olindi!")
              except KeyError:
                  pass 
              except Exception:
                  try:
                      sndmsg = await message.reply(get_api['result']['hd'])
                      await asyncio.sleep(1)
-                     dump_file = await message.reply_video(get_api['result']['hd'],caption="❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!")
+                     dump_file = await message.reply_video(get_api['result']['hd'],caption="❇️ @InstaProSaverrobot - orqali yuklab olindi!")
                      await sndmsg.delete()
                  except Exception:
                      try:
                         down_file = wget.download(get_api['result']['hd'])
-                        await message.reply_video(down_file,caption="❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!")
+                        await message.reply_video(down_file,caption="❇️ @InstaProSaverrobot - orqali yuklab olindi!")
                         await sndmsg.delete()
                         os.remove(down_file)
                      except:
@@ -34,19 +34,19 @@ async def link_handler(Mbot, message):
           else: 
              if get_api.get('result').get('sd'):
                try:
-                   dump_file = await message.reply_video(get_api['result']['sd'],caption="❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!")
+                   dump_file = await message.reply_video(get_api['result']['sd'],caption="❇️ @InstaProSaverrobot - orqali yuklab olindi!")
                except KeyError:
                    pass
                except Exception:
                    try:
                        sndmsg = await message.reply(get_api['result']['sd'])
                        await asyncio.sleep(1)
-                       dump_file = await message.reply_video(get_api['result']['sd'],caption="❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!")
+                       dump_file = await message.reply_video(get_api['result']['sd'],caption="❇️ @InstaProSaverrobot - orqali yuklab olindi!")
                        await sndmsg.delete()
                    except Exception:
                       try:
                         down_file = wget.download(get_api['result']['sd'])
-                        await message.reply_video(down_file,caption="❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!")
+                        await message.reply_video(down_file,caption="❇️ @InstaProSaverrobot - orqali yuklab olindi!")
                         await sndmsg.delete()
                         os.remove(down_file)
                       except:

@@ -13,13 +13,13 @@ async def twitter_handler(Mbot, message):
          link = link.replace("twitter.com","fxtwitter.com")
       m=await message.reply_sticker("CAACAgIAAxkBATWhF2Qz1Y-FKIKqlw88oYgN8N82FtC8AAJnAAPb234AAT3fFO9hR5GfHgQ")
       try:
-          dump_file = await message.reply_video(link,caption="❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!")
+          dump_file = await message.reply_video(link,caption="❇️ @InstaProSaverrobot - orqali yuklab olindi!")
       except Exception as e:
           print(e)
           try:
              snd_message=await message.reply(link)
              await asyncio.sleep(1)
-             dump_file = await message.reply_video(link,caption="❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!")
+             dump_file = await message.reply_video(link,caption="❇️ @InstaProSaverrobot - orqali yuklab olindi!")
              await snd_message.delete()
           except Exception as e:
               print(e)
@@ -31,13 +31,13 @@ async def twitter_handler(Mbot, message):
                   meta_tag = soup.find("meta", attrs={"property": "og:image"})
               content_value  = meta_tag['content']
               try:
-                  dump_file = await message.reply_video(content_value,caption="❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!")
+                  dump_file = await message.reply_video(content_value,caption="❇️ @InstaProSaverrobot - orqali yuklab olindi!")
               except Exception as e:
                   print(e)
                   try:
                      snd_msg=await message.reply(content_value)
                      await asyncio.sleep(1)
-                     await message.reply_video(content_value,caption="❇️ @InstaTiktokSaverUzBot - orqali yuklab olindi!")
+                     await message.reply_video(content_value,caption="❇️ @InstaProSaverrobot - orqali yuklab olindi!")
                      await snd_msg.delete()
                   except Exception as e:
                       print(e)
@@ -52,6 +52,6 @@ async def twitter_handler(Mbot, message):
           if "dump_file" in locals():
              await dump_file.copy(DUMP_GROUP)
        await m.delete()
-       await message.reply("❇️ @InstaTiktokSaverUzBot \n ❇️ @InstaTiktokSaverUzBot")               
+       await message.reply("❇️ @InstaProSaverrobot \n ❇️ @InstaProSaverrobot")               
                   
             
