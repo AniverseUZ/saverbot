@@ -60,7 +60,8 @@ async def start(Mbot, message):
 async def callback_query_handler(Mbot, callback_query):
     if callback_query.data == "check_subscription":
         user_id = callback_query.from_user.id
-        if is_subscribed(user_id):
+        chat_id = callback_query.message.chat.id
+        if is_subscribed(chat_id, user_id):
             await callback_query.answer("You are subscribed!")
         else:
             await callback_query.answer("You are not subscribed. Please subscribe first.")
