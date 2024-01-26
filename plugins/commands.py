@@ -4,15 +4,12 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from sys import executable
 from os import sys, execl, environ
 
-# Replace with your actual channel usernames and their respective invite links
-CHANNEL_INFO = {
-    'aniverseanime': 'https://t.me/+HEvFv2cgpk85ZjZi',
-    'aniverseteam': 'https://t.me/+FUWIvJ7nFEhkZWNi',
-}
+# Replace with your actual channel usernames
+CHANNEL_USERNAMES = ['@aniverseteam', '@aniverseanime']
 
 # Check if the user is subscribed to any of the channels
 def is_subscribed(user_id):
-    for channel_username in CHANNEL_INFO:
+    for channel_username in CHANNEL_USERNAMES:
         try:
             chat_member = Mbot.get_chat_member(channel_username, user_id)
             if chat_member.status not in ['left', 'kicked']:
@@ -43,8 +40,7 @@ async def start(Mbot, message):
     if not is_subscribed(user_id):
         # If not subscribed, provide buttons to subscribe to any of the channels
         keyboard_buttons = [
-            [InlineKeyboardButton(f"Subscribe to {channel}", callback_data=f"subscribe_{channel}")]
-            for channel in CHANNEL_INFO
+            [InlineKeyboardButton(f"Subscribe to {channel}", callback_data=f"subscribe_{channel}")] for channel in CHANNEL_USERNAMES
         ]
         # Add the "Check Subscription" button
         keyboard_buttons.append([InlineKeyboardButton("Check Subscription", callback_data="check_subscription")])
@@ -65,8 +61,9 @@ async def callback_query_handler(Mbot, callback_query):
     user_id = callback_query.from_user.id
     if callback_query.data.startswith("subscribe_"):
         channel = callback_query.data.split("_")[1]
-        invite_link = CHANNEL_INFO.get(f'@{channel}', 'Invalid Channel')
-        await Mbot.send_message(user_id, invite_link)
+        # Implement the logic to subscribe the user to the channel
+        # For example, you might want to use the `Mbot.add_chat_member` method
+        pass
     elif callback_query.data == "check_subscription":
         if is_subscribed(user_id):
             await callback_query.answer("You are subscribed!")
