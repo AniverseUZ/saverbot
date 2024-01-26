@@ -8,6 +8,7 @@ from os import sys, execl, environ
 CHANNEL_USERNAMES = ['Aniverseanime', 'AniverseTeam']
 
 # Check if the user is subscribed to any of the channels
+# Check if the user is subscribed to a specific channel
 def is_subscribed(channel_username, user_id):
     try:
         chat_member = Mbot.get_chat_member(channel_username, user_id)
@@ -36,10 +37,11 @@ async def monitor(Mbot, message):
 @Mbot.on_message(filters.command("start") & filters.incoming)
 async def start(Mbot, message):
     user_id = message.from_user.id
-    if not is_subscribed(user_id):
-        # If not subscribed, provide buttons to subscribe to any of the channels
+    if not any(is_subscribed(channel, user_id) for channel in CHANNEL_USERNAMES):
+        # If not subscribed to any channel, provide buttons to subscribe
         keyboard_buttons = [
-            [InlineKeyboardButton(f"Subscribe to {channel}", url=f'https://t.me/{channel}')] for channel in CHANNEL_USERNAMES
+            [InlineKeyboardButton(f"Subscribe to {channel}", callback_data=f"subscribe_{channel}")]
+            for channel in CHANNEL_USERNAMES
         ]
         # Add the "Check Subscription" button
         keyboard_buttons.append([InlineKeyboardButton("Check Subscription", callback_data="check_subscription")])
