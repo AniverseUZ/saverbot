@@ -4,12 +4,15 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from sys import executable
 from os import sys, execl, environ
 
-# Replace with your actual channel usernames
-CHANNEL_USERNAMES = ['@AniverseTeam', '@AniverseAnime']
+# Replace with your actual channel usernames and their respective invite links
+CHANNEL_INFO = {
+    'aniverseanime': 'https://t.me/+HEvFv2cgpk85ZjZi',
+    'aniverseteam': 'https://t.me/+FUWIvJ7nFEhkZWNi',
+}
 
 # Check if the user is subscribed to any of the channels
 def is_subscribed(user_id):
-    for channel_username in CHANNEL_USERNAMES:
+    for channel_username in CHANNEL_INFO:
         try:
             chat_member = Mbot.get_chat_member(channel_username, user_id)
             if chat_member.status not in ['left', 'kicked']:
@@ -40,7 +43,8 @@ async def start(Mbot, message):
     if not is_subscribed(user_id):
         # If not subscribed, provide buttons to subscribe to any of the channels
         keyboard_buttons = [
-            [InlineKeyboardButton(f"Subscribe to {channel}", url=f'https://t.me/{channel}')] for channel in CHANNEL_USERNAMES
+            [InlineKeyboardButton(f"Subscribe to {channel}", callback_data=f"subscribe_{channel}")]
+            for channel in CHANNEL_INFO
         ]
         # Add the "Check Subscription" button
         keyboard_buttons.append([InlineKeyboardButton("Check Subscription", callback_data="check_subscription")])
@@ -55,16 +59,20 @@ async def start(Mbot, message):
     
     await message.reply(f"👋👋 Assalomu Alaykum 👋👋 {message.from_user.mention()}\n Siz ushbu bot orqali o'zingiz istagan ijtimoiy tarmoqdan video, post, rasm, hikoya va boshqalarni yuklab olishingiz mumkin! \nHozirda ushbu bot orqali siz \n☑️Instagram \n☑️TikTok \n☑️Twitter \n☑️Facebook orqali barcha medialarni yuklab olishingiz mumkin! \nShunchaki botga havolangizni yuboring!", reply_markup=keyboard)
 
-# Callback Query handler for the "Check Subscription" button
+# Callback Query handler for the buttons
 @Mbot.on_callback_query()
 async def callback_query_handler(Mbot, callback_query):
-    if callback_query.data == "check_subscription":
-        user_id = callback_query.from_user.id
-        chat_id = callback_query.message.chat.id
-        if is_subscribed(chat_id, user_id):
+    user_id = callback_query.from_user.id
+    if callback_query.data.startswith("subscribe_"):
+        channel = callback_query.data.split("_")[1]
+        invite_link = CHANNEL_INFO.get(f'@{channel}', 'Invalid Channel')
+        await Mbot.send_message(user_id, invite_link)
+    elif callback_query.data == "check_subscription":
+        if is_subscribed(user_id):
             await callback_query.answer("You are subscribed!")
         else:
             await callback_query.answer("You are not subscribed. Please subscribe first.")
+
              
 @Mbot.on_message(filters.command("help") & filters.incoming)
 async def help(Mbot, message):
