@@ -8,10 +8,10 @@ from os import sys, execl, environ
 CHANNEL_USERNAMES = ['AniverseAnime', 'AniverseTeam']
 
 # Check if the user is subscribed to any of the channels
-def is_subscribed(user_id):
+async def is_subscribed(client, user_id):
     for channel_username in CHANNEL_USERNAMES:
         try:
-            chat_member = Mbot.get_chat_member(channel_username, user_id)
+            chat_member = await client.get_chat_member(channel_username, user_id)
             if chat_member.status not in ['left', 'kicked']:
                 return True
         except Exception as e:
