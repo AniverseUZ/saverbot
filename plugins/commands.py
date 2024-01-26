@@ -5,17 +5,17 @@ from sys import executable
 from os import sys, execl, environ
 
 # Replace with your actual channel usernames
-CHANNEL_USERNAMES = ['Aniverseanime', 'AniverseTeam']
+CHANNEL_USERNAMES = ['AniverseAnime', 'AniverseTeam']
 
 # Check if the user is subscribed to any of the channels
-# Check if the user is subscribed to a specific channel
-def is_subscribed(channel_username, user_id):
-    try:
-        chat_member = Mbot.get_chat_member(channel_username, user_id)
-        if chat_member.status not in ['left', 'kicked']:
-            return True
-    except Exception as e:
-        print(f"Error checking subscription: {e}")
+def is_subscribed(user_id):
+    for channel_username in CHANNEL_USERNAMES:
+        try:
+            chat_member = Mbot.get_chat_member(channel_username, user_id)
+            if chat_member.status not in ['left', 'kicked']:
+                return True
+        except Exception as e:
+            print(f"Error checking subscription: {e}")
     return False
 
 RESTART_ON = environ.get('RESTART_ON')
@@ -37,11 +37,10 @@ async def monitor(Mbot, message):
 @Mbot.on_message(filters.command("start") & filters.incoming)
 async def start(Mbot, message):
     user_id = message.from_user.id
-    if not any(is_subscribed(channel, user_id) for channel in CHANNEL_USERNAMES):
-        # If not subscribed to any channel, provide buttons to subscribe
+    if not is_subscribed(user_id):
+        # If not subscribed, provide buttons to subscribe to any of the channels
         keyboard_buttons = [
-            [InlineKeyboardButton(f"Subscribe to {channel}", callback_data=f"subscribe_{channel}")]
-            for channel in CHANNEL_USERNAMES
+            [InlineKeyboardButton(f"Subscribe to {channel}", url=f'https://t.me/{channel}')] for channel in CHANNEL_USERNAMES
         ]
         # Add the "Check Subscription" button
         keyboard_buttons.append([InlineKeyboardButton("Check Subscription", callback_data="check_subscription")])
@@ -61,7 +60,7 @@ async def start(Mbot, message):
 async def callback_query_handler(Mbot, callback_query):
     user_id = callback_query.from_user.id
     if callback_query.data == "check_subscription":
-        if any(is_subscribed(channel, user_id) for channel in CHANNEL_USERNAMES):
+        if is_subscribed(user_id):
             await callback_query.answer("You are subscribed!")
         else:
             await callback_query.answer("You are not subscribed. Please subscribe first.")
