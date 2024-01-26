@@ -8,14 +8,13 @@ from os import sys, execl, environ
 CHANNEL_USERNAMES = ['Aniverseanime', 'AniverseTeam']
 
 # Check if the user is subscribed to any of the channels
-def is_subscribed(user_id):
-    for channel_username in CHANNEL_USERNAMES:
-        try:
-            chat_member = Mbot.get_chat_member(channel_username, user_id)
-            if chat_member.status not in ['left', 'kicked']:
-                return True
-        except Exception as e:
-            print(f"Error checking subscription: {e}")
+def is_subscribed(channel_username, user_id):
+    try:
+        chat_member = Mbot.get_chat_member(channel_username, user_id)
+        if chat_member.status not in ['left', 'kicked']:
+            return True
+    except Exception as e:
+        print(f"Error checking subscription: {e}")
     return False
 
 RESTART_ON = environ.get('RESTART_ON')
@@ -60,15 +59,15 @@ async def start(Mbot, message):
 async def callback_query_handler(Mbot, callback_query):
     user_id = callback_query.from_user.id
     if callback_query.data == "check_subscription":
-        if is_subscribed(user_id):
+        if any(is_subscribed(channel, user_id) for channel in CHANNEL_USERNAMES):
             await callback_query.answer("You are subscribed!")
         else:
             await callback_query.answer("You are not subscribed. Please subscribe first.")
     elif callback_query.data.startswith("subscribe_"):
         # Extract the channel username from the callback data
         channel = callback_query.data.split("_")[1]
-        # Open the channel directly
-        await Mbot.send_message(user_id, f"Opening {channel} directly...")
+        # Open the channel directly using the 'url' parameter
+        await Mbot.send_message(user_id, f"Opening {channel} directly...", disable_web_page_preview=True)
              
 @Mbot.on_message(filters.command("help") & filters.incoming)
 async def help(Mbot, message):
